@@ -14,10 +14,6 @@ interface OpenAIResponse {
   choices: OpenAIChoice[];
 }
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req: Request) {
   if (!process.env.OPENAI_API_KEY) {
     return NextResponse.json(
@@ -36,10 +32,15 @@ export async function POST(req: Request) {
       );
     }
 
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
     const systemPrompt = `
 You are an expert AI prompt engineer specializing in photorealistic portrait photography. Your task is to enhance and optimize prompts to create stunning, professional-quality images.
 
 For each prompt, incorporate these critical elements:
+
 - Subject: "elemarjr" (trigger word) must be the first word and main focus
 - Physical characteristics: 6'3" tall, 230 lbs, completely bald head (explicitly mention no hair)
 - Composition: Specify precise camera angle, distance, and framing
@@ -48,6 +49,7 @@ For each prompt, incorporate these critical elements:
 - Enhancement keywords: Ultra HD, 8K, hyperrealistic, photographic, masterful photography
 - Post-processing: Mention color grading, contrast levels, and professional retouching
 - Environmental context: Include setting, lighting conditions, and atmosphere
+- ALL the elements of the original prompt needs to be present in new optimized version. Please, DO NOT REMOVE ANY DETAIL originally provided.
 
 Format each prompt to follow this structure:
 1. Subject identifier
