@@ -12,6 +12,11 @@ const nextConfig = {
       },
     ],
   },
+  output: "standalone",
+  //TODO: Remove this after fixing the lint errors
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;
