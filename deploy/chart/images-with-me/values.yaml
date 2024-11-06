@@ -20,7 +20,7 @@ ingress:
   hosts:
     - host: images-with-me.elemarjr.com
       paths:
-        - path: /insights/
+        - path: /
           pathType: Prefix
   tls:
    - secretName: images-with-me-tls
