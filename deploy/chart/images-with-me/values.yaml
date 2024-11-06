@@ -55,10 +55,15 @@ envVars:
       secretKeyRef:
         name: images-with-me-secrets
         key: OPENAI_API_KEY
-  - name: REPLICATE_API_KEY
+  - name: REPLICATE_API_TOKEN
     valueFrom:
       secretKeyRef:
         name: images-with-me-secrets
-        key: REPLICATE_API_KEY
+        key: REPLICATE_API_TOKEN
+  - name: NEXT_PUBLIC_REPLICATE_API_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: images-with-me-secrets
+        key: NEXT_PUBLIC_REPLICATE_API_TOKEN
 
 
