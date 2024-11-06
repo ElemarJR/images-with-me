@@ -28,4 +28,4 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 USER nextjs
 
 ENV HOSTNAME="0.0.0.0"
-CMD ["yarn", "start"]
+CMD ["node", "server.js"]

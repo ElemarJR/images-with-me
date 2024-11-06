@@ -1,0 +1,59 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read  # This is required for actions/checkout
+
+jobs:  
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build the Docker image
+      run: docker build . --tag 339713015367.dkr.ecr.us-east-1.amazonaws.com/images-with-me:${{ github.run_id }} --tag 339713015367.dkr.ecr.us-east-1.amazonaws.com/images-with-me:latest
+
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: arn:aws:iam::339713015367:role/GithubIdentityProviderRole
+        role-session-name: GithubSession
+        aws-region: us-east-1
+
+    - name: Amazon ECR Login
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Push Docker images
+      run: |
+        docker image push 339713015367.dkr.ecr.us-east-1.amazonaws.com/images-with-me:${{ github.run_id }}
+        docker image push 339713015367.dkr.ecr.us-east-1.amazonaws.com/images-with-me:latest        
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v4
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: arn:aws:iam::339713015367:role/GithubIdentityProviderRole
+        role-session-name: GithubSession
+        aws-region: us-east-1
+
+    - name: Deploy Backend
+      run: |
+        aws eks update-kubeconfig --name ia-factory-cluster --region us-east-1
+        helm upgrade --install images-with-me ./deploy/chart/images-with-me --namespace labs --set image.tag=${{ github.run_id }} --wait
+
+          
+
+    
+        
+
+          

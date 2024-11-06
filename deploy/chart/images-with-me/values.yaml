@@ -1,0 +1,64 @@
+replicaCount: 1
+
+image:
+  repository: 339713015367.dkr.ecr.us-east-1.amazonaws.com/images-with-me
+  pullPolicy: Always
+  tag: latest
+
+podAnnotations: {}
+podLabels: {}
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: false
+  className: nginx
+  annotations:  
+    cert-manager.io/issuer: "letsencrypt"
+  hosts:
+    - host: images-with-me.elemarjr.com
+      paths:
+        - path: /insights/
+          pathType: Prefix
+  tls:
+   - secretName: images-with-me-tls
+     hosts:
+       - images-with-me.elemarjr.com
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+    
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+envVars: 
+  - name: OPENAI_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: images-with-me-secrets
+        key: OPENAI_API_KEY
+  - name: REPLICATE_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: images-with-me-secrets
+        key: REPLICATE_API_KEY
+
+
