@@ -18,14 +18,14 @@ ingress:
   annotations:  
     cert-manager.io/issuer: "letsencrypt"
   hosts:
-    - host: images-with-me.elemarjr.com
+    - host: labs.elemarjr.com
       paths:
-        - path: /
+        - path: /images-with-me
           pathType: Prefix
   tls:
    - secretName: images-with-me-tls
      hosts:
-       - images-with-me.elemarjr.com
+       - labs.elemarjr.com
 
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
