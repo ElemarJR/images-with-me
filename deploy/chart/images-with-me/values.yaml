@@ -41,12 +41,12 @@ resources:
 
 livenessProbe:
   httpGet:
-    path: /
+    path: /images-with-me
     port: http
     
 readinessProbe:
   httpGet:
-    path: /
+    path: /images-with-me
     port: http
 
 envVars: 
