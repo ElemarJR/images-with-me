@@ -17,6 +17,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  basePath: "/images-with-me"
 };
 
 export default nextConfig;
